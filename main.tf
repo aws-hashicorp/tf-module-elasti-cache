@@ -15,7 +15,7 @@ resource "aws_cloudwatch_log_group" "cloud_watch_engine_logs" {
 
 # --- Security Group ---
 resource "aws_security_group" "sg_elasticache" {
-  name   = "${var.elasticache_name}-sg"
+  name   = "elasticache-${var.elasticache_name}-sg"
   vpc_id = var.vpc_id
 
   dynamic "ingress" {
@@ -57,7 +57,7 @@ resource "aws_security_group" "sg_elasticache" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = merge(var.tags, { Name = "${var.elasticache_name}-sg" })
+  tags = merge(var.tags, { Name = "elasticache-${var.elasticache_name}-sg" })
 }
 
 # --- Elasticache Subnet Group ---
