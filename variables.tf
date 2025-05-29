@@ -99,3 +99,18 @@ variable "elasticache_multi_az_enabled" {
   type        = bool
   default     = false
 }
+
+# --- Elasticache Parameter Group ---
+variable "create_elasticache_parameter_group" {
+  description = "Whether to create the Elasticache parameter group"
+  type        = bool
+  default     = false
+}
+
+variable "elasticache_parameters" {
+  description = "The parameters for the Elasticache parameter group"
+  type        = map(string)
+  default = {
+    "maxmemory-policy" = "allkeys-lru"
+  }
+}

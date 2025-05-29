@@ -82,7 +82,7 @@ resource "aws_elasticache_replication_group" "elasticache_replica_group" {
   port                       = 6379
   engine_version             = var.elasticache_engine_version
   num_node_groups            = var.elasticache_num_node_groups
-  parameter_group_name       = var.elasticache_parameter_group
+  parameter_group_name       = var.create_elasticache_parameter_group ? aws_elasticache_parameter_group.elasticache_parameter_group[0].name : var.elasticache_parameter_group
   engine                     = var.elasticache_engine
   subnet_group_name          = aws_elasticache_subnet_group.elasticache_subnet_group.name
   automatic_failover_enabled = var.elasticache_automatic_failover_enabled
@@ -106,6 +106,23 @@ resource "aws_elasticache_replication_group" "elasticache_replica_group" {
     destination_type = "cloudwatch-logs"
     log_format       = "json"
     log_type         = "engine-log"
+  }
+
+  tags = var.tags
+}
+
+# --- Elasticache Parameter Group ---
+resource "aws_elasticache_parameter_group" "elasticache_parameter_group" {
+  count  = var.create_elasticache_parameter_group ? 1 : 0
+  name   = "elasticache-parameter-group-${var.elasticache_name}"
+  family = "redis6.x"
+
+  dynamic "parameter" {
+    for_each = var.elasticache_parameters
+    content {
+      name  = parameter.value.name
+      value = parameter.value.value
+    }
   }
 
   tags = var.tags
