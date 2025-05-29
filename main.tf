@@ -96,13 +96,13 @@ resource "aws_elasticache_replication_group" "elasticache_replica_group" {
   security_group_ids = [aws_security_group.sg_elasticache.id]
 
   log_delivery_configuration {
-    destination      = aws_cloudwatch_log_group.cloud_watch_slow_logs.arn
+    destination      = aws_cloudwatch_log_group.cloud_watch_slow_logs.name
     destination_type = "cloudwatch-logs"
     log_format       = "json"
     log_type         = "slow-log"
   }
   log_delivery_configuration {
-    destination      = aws_cloudwatch_log_group.cloud_watch_engine_logs.arn
+    destination      = aws_cloudwatch_log_group.cloud_watch_engine_logs.name
     destination_type = "cloudwatch-logs"
     log_format       = "json"
     log_type         = "engine-log"
